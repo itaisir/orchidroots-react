@@ -2,9 +2,7 @@ import produce from "immer";
 import * as types from "../actionTypes/authActionTypes";
 
 const initialState = {
-  loading: false,
   isLoggedIn: false,
-  loginErrors: [],
   signUpErrors: [],
   forgetPasswordErrors: [],
 };
@@ -12,24 +10,13 @@ const initialState = {
 const authReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
-      case types.CLEAR_ERRORS:
-        debugger
-        draft.loginErrors = [];
-        draft.loading = false;
+      case types.LOGIN_INIT:
+        draft.isLoggedIn = false;
         return;
-        case types.LOGIN_INIT:
-          debugger
-          draft.loginErrors = [];
-          draft.loading = true;
-          return;
       case types.LOGIN_SUCCESS:
-        draft.loading = false;
         draft.isLoggedIn = true;
         return;
       case types.LOGIN_FAILURE:
-        debugger
-        draft.loginErrors.push(action.error.error);
-        draft.loading = false;
         draft.isLoggedIn = false;
         return;
 

@@ -1,17 +1,15 @@
 import { connect } from "react-redux";
-import { loginInit,clearErrors } from "../../Actions/authActions";
+import { loginInit } from "../../Actions/authActions";
 import Login from "./Login"
 import { reduxForm } from "redux-form";
 import { withRouter } from "react-router";
 
 
 const mapDispatchToProps = {
-    loginInit,
-    clearErrors
+    loginInit
 };
 
 const mapStateToProps = (state) => {
-    debugger
     return {
     loading: state.authReducer.loading,
     errors: state.authReducer.loginErrors

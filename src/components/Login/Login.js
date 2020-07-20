@@ -8,11 +8,9 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      errors: [],
+      isLoading: false,
     };
-  }
-  componentWillReceiveProps() {
-    debugger
-    this.props.clearErrors();
   }
   changeUsername = (event) => {
     this.setState({ username: event.target.value });
@@ -20,9 +18,22 @@ class Login extends Component {
   changePassword = (event) => {
     this.setState({ password: event.target.value });
   };
+  onLoginFail = (errors) => {
+    this.setState({ errors: errors, isLoading: false });
+  };
+  onLoginSuccess = () => {
+    this.setState({ isLoading: false });
+  };
   submit = (event) => {
     event.preventDefault();
-    this.props.loginInit(this.state, this.props.history);
+    this.setState({ isLoading: true });
+    let { username, password } = this.state;
+    this.props.loginInit(
+      { username, password },
+      this.props.history,
+      this.onLoginFail,
+      this.onLoginSuccess
+    );
   };
   render() {
     return (
@@ -39,7 +50,7 @@ class Login extends Component {
               onChange={this.changeUsername}
               value={this.state.username}
               placeholder="Enter username"
-              disabled={this.props.loading}
+              disabled={this.state.isLoading}
               required
             />
           </div>
@@ -52,12 +63,12 @@ class Login extends Component {
               value={this.state.password}
               className="form-control"
               placeholder="Password"
-              disabled={this.props.loading}
+              disabled={this.state.isLoading}
               required
             />
           </div>
-          <div class="error text-danger my-1">{this.props.errors}</div>
-          {this.props.loading ? (
+          <div class="error text-danger my-1">{this.state.errors}</div>
+          {this.state.isLoading ? (
             <button class="btn btn-primary" type="button" disabled>
               <span
                 class="spinner-border spinner-border-sm"

@@ -1,24 +1,29 @@
 import * as types from "../actionTypes/authActionTypes";
 import api from "../api/api";
 
-export const loginInit = (payload, history) => async (dispatch) => {
+export const loginInit = (
+  payload,
+  history,
+  onLoginFail,
+  onLoginSuccess
+) => async (dispatch) => {
   dispatch({ type: types.LOGIN_INIT });
   api.auth
     .login(payload)
     .then((value) => {
-      dispatch(loginSuccess(value));
+      dispatch(loginSuccess());
+      onLoginSuccess();
       localStorage.setItem("auth-token", "Token " + value.token);
       history.push("/");
     })
     .catch((err) => {
-      debugger;
       dispatch(loginFailure(err.response.data));
+      onLoginFail(err.response.data.error);
     });
 };
 
-export const loginSuccess = (payload) => ({
+export const loginSuccess = () => ({
   type: types.LOGIN_SUCCESS,
-  payload,
 });
 
 export const loginFailure = (error) => ({
@@ -31,7 +36,9 @@ export const logoutInit = (payload) => ({
   payload,
 });
 
-export const signupInit = (payload, history) => async (dispatch) => {
+export const signupInit = (payload, history, next_action) => async (
+  dispatch
+) => {
   dispatch({ type: types.SIGNUP_INIT });
   api.auth
     .signup(payload)
@@ -41,8 +48,9 @@ export const signupInit = (payload, history) => async (dispatch) => {
       history.push("/");
     })
     .catch((err) => {
+      //   dispatch(signupFailure(err.response.data));
       debugger;
-      dispatch(signupFailure(err.response.data));
+      next_action(err.response.data);
     });
 };
 
@@ -54,9 +62,3 @@ export const signupFailure = (error) => ({
   type: types.SIGNUP_FAILURE,
   error,
 });
-
-
-
-export const clearErrors = () => ({
-    type: types.CLEAR_ERRORS,
-  });
