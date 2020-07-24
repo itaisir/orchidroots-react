@@ -8,18 +8,15 @@ import createStore from "./store";
 import { Provider } from "react-redux";
 
 import { ConnectedRouter } from "connected-react-router";
-import { BrowserRouter } from "react-router-dom";
 
 const { store, history } = createStore();
 ReactDOM.render(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-
-        <Header />
-          <Router />
-
-      </ConnectedRouter>
-    </Provider>,
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <Header />
+      <Router />
+    </ConnectedRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

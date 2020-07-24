@@ -4,6 +4,9 @@ import * as types from "../actionTypes/authActionTypes";
 const initialState = {
   isLoggedIn: false,
   signUpErrors: [],
+  countries: [],
+  photographers: [],
+  signUpEmail:"",
   forgetPasswordErrors: [],
 };
 
@@ -24,33 +27,31 @@ const authReducer = (state = initialState, action) =>
         draft.isLoggedIn = false;
         return;
 
+      case types.GET_COUNTRIES_SUCCESS:
+        draft.countries = action.countries;
+        return;
+      case types.GET_PHOTOGRAPHERS_SUCCESS:
+        draft.photographers = action.photographers;
+        return;
       case types.SIGNUP_INIT:
         draft.signUpErrors = [];
-        draft.loading = true;
         return;
       case types.SIGNUP_SUCCESS:
-        draft.loading = false;
+        draft.signUpEmail = action.email;
         return;
       case types.SIGNUP_FAILURE:
-        for (const key in action.error) {
-          const errs = action.error[key];
-          if (typeof errs == "string")
-            draft.signUpErrors.push(action.error.error);
-          else if (Array.isArray(errs)) draft.signUpErrors.push(...errs);
-        }
-        draft.loading = false;
         return;
 
       case types.FORGET_PASSWORD_INIT:
         draft.forgetPasswordErrors = [];
-        draft.loading = true;
         return;
       case types.FORGET_PASSWORD_SUCCESS:
-        draft.loading = false;
         return;
       case types.FORGET_PASSWORD_FAILURE:
         draft.forgetPasswordErrors.push(action.error.details);
-        draft.loading = false;
+        return;
+
+      default:
         return;
     }
   });

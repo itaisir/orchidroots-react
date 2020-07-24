@@ -31,34 +31,99 @@ export const loginFailure = (error) => ({
   error,
 });
 
+export const getCountries = () => async (dispatch) => {
+  dispatch({ type: types.GET_COUNTRIES });
+  api.auth
+    .getCountries()
+    .then((value) => {
+      dispatch(getCountriesSuccess(value));
+    })
+    .catch((err) => {
+      dispatch(getCountriesSuccess([]));
+    });
+};
+
+export const getCountriesSuccess = (data) => ({
+  type: types.GET_COUNTRIES_SUCCESS,
+  countries: data,
+});
+
+export const getPhotographers = () => async (dispatch) => {
+  dispatch({ type: types.GET_PHOTOGRAPHERS });
+  api.auth
+    .getPhotographers()
+    .then((value) => {
+      dispatch(getPhotographersSuccess(value));
+    })
+    .catch((err) => {
+      dispatch(getPhotographersSuccess([]));
+    });
+};
+
+export const getPhotographersSuccess = (data) => ({
+  type: types.GET_PHOTOGRAPHERS_SUCCESS,
+  photographers: data,
+});
+
 export const logoutInit = (payload) => ({
   type: types.LOGOUT_INIT,
   payload,
 });
 
-export const signupInit = (payload, history, next_action) => async (
-  dispatch
-) => {
+export const signupInit = (
+  payload,
+  history,
+  onSignupFail,
+  onSignupSuccess
+) => async (dispatch) => {
   dispatch({ type: types.SIGNUP_INIT });
   api.auth
-    .signup(payload)
+    .signUp(payload)
     .then((value) => {
-      dispatch(signupSuccess(value));
-      localStorage.setItem("auth-token", "Token " + value.token);
-      history.push("/");
+      dispatch(signupSuccess(payload.email));
+      onSignupSuccess();
+      history.push("/verification");
     })
     .catch((err) => {
-      //   dispatch(signupFailure(err.response.data));
-      debugger;
-      next_action(err.response.data);
+      dispatch(signupFailure());
+      onSignupFail(err.response.data);
     });
 };
 
-export const signupSuccess = (payload) => ({
+export const signupSuccess = (email) => ({
   type: types.SIGNUP_SUCCESS,
-  payload,
+  email,
 });
 export const signupFailure = (error) => ({
   type: types.SIGNUP_FAILURE,
+  error,
+});
+
+export const verificationInit = (
+  payload,
+  history,
+  onVerificationFail,
+  onVerificationSuccess
+) => async (dispatch) => {
+  dispatch({ type: types.VERIFICATION_INIT });
+  api.auth
+    .verifyCode(payload)
+    .then(() => {
+      dispatch(verificationSuccess());
+      onVerificationSuccess();
+      history.push("/login");
+    })
+    .catch((err) => {
+      dispatch(verificationFailure());
+      onVerificationFail(err.response.data);
+    });
+};
+
+export const verificationSuccess = () => ({
+  type: types.VERIFICATION_SUCCESS,
+});
+
+export const verificationFailure = (error) => ({
+  type: types.VERIFICATION_FAILURE,
   error,
 });
