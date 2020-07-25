@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactCodeInput from "react-verification-code-input";
 import { Link } from "react-router-dom";
+import { errorsToList } from "../../constants";
 
 class Verification extends Component {
   constructor(props) {
@@ -21,30 +22,28 @@ class Verification extends Component {
       this.onVerificationSuccess
     );
   };
-  onClickResendCode = (value) => {
-    //TO DO
-  };
-  errorObjToList = (errors) =>
-  {
-    let error_list = [];
-    for (const key in errors) {
-      const errs = errors[key];
-      if (typeof errs === "string") error_list.push(errors.error);
-      else if (Array.isArray(errs)) error_list.push(...errs);
-      else
-      {
-        error_list.push(this.errorObjToList(errs))
-      }
-      return error_list;
-    }
-  };
   onVerificationFail = (errors) => {
-    errors = this.errorObjToList(errors)
+    errors = errorsToList(errors);
     this.setState({ errors: errors, isLoading: false });
   };
   onVerificationSuccess = () => {
     this.setState({ isLoading: false });
   };
+  onClickResendCode = () => {
+    this.props.resendVerificationInit(
+      { email: this.props.email },
+      this.onResendVerificationFail,
+      this.onResendVerificationSuccess
+    );
+  };
+  onResendVerificationFail = (errors) => {
+    errors = errorsToList(errors);
+    alert("Verification Email Error \n " + errors);
+  };
+  onResendVerificationSuccess = (response) => {
+    alert(errorsToList(response));
+  };
+
   render() {
     return (
       <div className="loginform col-md-6">
@@ -55,6 +54,7 @@ class Verification extends Component {
         </h5>
 
         <form onSubmit={this.submit}>
+          <label htmlFor="exampleInputPassword1">Verification Code</label>
           <div className="form-group ">
             <ReactCodeInput
               onComplete={this.onCompleteCodeInput}
@@ -64,9 +64,10 @@ class Verification extends Component {
             />
           </div>
           <div>
-            if you didn't recive the code <Link onClick={this.onClickResendCode}>resend</Link>
+            Didn't recive the code{" "}
+            <Link onClick={this.onClickResendCode}>resend</Link>
           </div>
-          <div class="error text-danger my-1">{this.state.errors}</div>
+          <div className="error text-danger my-1">{this.state.errors}</div>
         </form>
       </div>
     );

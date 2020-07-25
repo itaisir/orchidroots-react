@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import "./signup.css";
+import { errorsToList } from "../../constants";
+import { Link } from "react-router-dom";
+import MyFaceBookLogin from "../MyFaceBookLogin";
 
 class Signup extends Component {
   constructor(props) {
@@ -22,24 +25,8 @@ class Signup extends Component {
     };
   }
 
-  errorObjToList = (errors) =>
-  {
-    let error_list = [];
-    for (const key in errors) {
-      const errs = errors[key];
-      if (typeof errs === "string") error_list.push(errors.error);
-      else if (Array.isArray(errs)) error_list.push(...errs);
-      else
-      {
-        error_list.push(this.errorObjToList(errs))
-      }
-      return error_list;
-    }
-  };
-
-
   onSignupFail = (errors) => {
-    let error_list = this.errorObjToList(errors);
+    let error_list = errorsToList(errors);
     this.setState({ errors: error_list, isLoading: false });
   };
   onSignupSuccess = () => {
@@ -79,19 +66,19 @@ class Signup extends Component {
         <h3>signup</h3>
 
         <form onSubmit={this.submit}>
-          <div class="form-row">
-            <div class="col-md-6 mb-3">
-              <label for="validationCustomUsername">Username</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroupPrepend">
+          <div className="form-row">
+            <div className="col-md-6 mb-3">
+              <label htmlFor="validationCustomUsername">Username</label>
+              <div className="input-group">
+                <div className="input-group-prepend">
+                  <span className="input-group-text" id="inputGroupPrepend">
                     @
                   </span>
                 </div>
                 <input
                   type="text"
                   name="username"
-                  class="form-control"
+                  className="form-control"
                   id="validationCustomUsername"
                   placeholder="Username"
                   aria-describedby="inputGroupPrepend"
@@ -100,11 +87,13 @@ class Signup extends Component {
                   disabled={this.state.isLoading}
                   required
                 />
-                <div class="invalid-feedback">Please choose a username.</div>
+                <div className="invalid-feedback">
+                  Please choose a username.
+                </div>
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="password">Password</label>
+            <div className="col-md-3 mb-3">
+              <label htmlFor="password">Password</label>
               <input
                 name="password"
                 type="password"
@@ -116,8 +105,8 @@ class Signup extends Component {
                 required
               />
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="confirm_password">Confirm Password</label>
+            <div className="col-md-3 mb-3">
+              <label htmlFor="confirm_password">Confirm Password</label>
               <input
                 name="confirm_password"
                 type="password"
@@ -131,9 +120,9 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="col-md-6 mb-3">
-              <label for="fullname">Full name</label>
+          <div className="form-row">
+            <div className="col-md-6 mb-3">
+              <label htmlFor="fullname">Full name</label>
               <input
                 name="fullname"
                 type="text"
@@ -145,8 +134,8 @@ class Signup extends Component {
                 required
               />
             </div>
-            <div class="col-md-6 mb-3">
-              <label for="email">Email</label>
+            <div className="col-md-6 mb-3">
+              <label htmlFor="email">Email</label>
               <input
                 name="email"
                 type="text"
@@ -160,9 +149,9 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="col-md-12 mb-3">
-              <label for="photo_credit_name">
+          <div className="form-row">
+            <div className="col-md-12 mb-3">
+              <label htmlFor="photo_credit_name">
                 The name you prefer to use for credit attribution
               </label>
               <input
@@ -178,9 +167,9 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="col-md-12 mb-3">
-              <label for="current_credit_name_id">
+          <div className="form-row">
+            <div className="col-md-12 mb-3">
+              <label htmlFor="current_credit_name_id">
                 The name currently used for credit attribution in OrchidRoots.
                 Leave blank if you do not see your name iin the list. WARNING:
                 your account will be removed if you selected name that is not
@@ -206,9 +195,9 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="col-md-12 mb-3">
-              <label for="specialty">
+          <div className="form-row">
+            <div className="col-md-12 mb-3">
+              <label htmlFor="specialty">
                 Orchid related Interest. List genera or alliances of your
                 interest
               </label>
@@ -225,9 +214,9 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="col-md-12 mb-3">
-              <label for="country">Select a country:</label>
+          <div className="form-row">
+            <div className="col-md-12 mb-3">
+              <label htmlFor="country">Select a country:</label>
               <select
                 className=" form-control"
                 name="country"
@@ -244,31 +233,27 @@ class Signup extends Component {
             </div>
           </div>
 
-          <div class="error text-danger my-1">{this.state.errors}</div>
+          <div className="error text-danger my-1">{this.state.errors}</div>
           {this.state.isLoading ? (
-            <button class="btn btn-primary" type="button" disabled>
+            <button className="btn btn-warning" type="button" disabled>
               <span
-                class="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm"
                 role="status"
                 aria-hidden="true"
               ></span>
               Loading...
             </button>
           ) : (
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-warning">
               Submit
             </button>
           )}
 
-          <div class="login_message row d-flex justify-content-between align-items-center">
+          <div className="login_message row d-flex justify-content-between align-items-center">
             <div>
-              Have an account ? <a href="/login"> Login </a>
+              Have an account? <Link to="/login">Login</Link>
             </div>
-            <div class="">
-              <a href="#" class="btn btn-primary facebook">
-                <span>Login with Facebook</span> <i class="fa fa-facebook"></i>
-              </a>
-            </div>
+              <MyFaceBookLogin/>
           </div>
         </form>
       </div>

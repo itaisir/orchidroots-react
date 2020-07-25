@@ -6,8 +6,8 @@ const initialState = {
   signUpErrors: [],
   countries: [],
   photographers: [],
-  signUpEmail:"",
-  forgetPasswordErrors: [],
+  signUpEmail: "",
+  resetPasswordUsername: "",
 };
 
 const authReducer = (state = initialState, action) =>
@@ -42,13 +42,10 @@ const authReducer = (state = initialState, action) =>
       case types.SIGNUP_FAILURE:
         return;
 
-      case types.FORGET_PASSWORD_INIT:
-        draft.forgetPasswordErrors = [];
+      case types.FORGET_PASSWORD_SEND_CODE_INIT:
         return;
-      case types.FORGET_PASSWORD_SUCCESS:
-        return;
-      case types.FORGET_PASSWORD_FAILURE:
-        draft.forgetPasswordErrors.push(action.error.details);
+      case types.FORGET_PASSWORD_SEND_CODE_SUCCESS:
+        draft.resetPasswordUsername = action.username;
         return;
 
       default:

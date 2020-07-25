@@ -1,5 +1,6 @@
 import * as types from "../actionTypes/authActionTypes";
 import api from "../api/api";
+import { logout } from "../constants";
 
 export const loginInit = (
   payload,
@@ -65,10 +66,16 @@ export const getPhotographersSuccess = (data) => ({
   photographers: data,
 });
 
-export const logoutInit = (payload) => ({
-  type: types.LOGOUT_INIT,
-  payload,
-});
+export const logoutInit = (history) => async (dispatch) => {
+  dispatch({ type: types.LOGOUT_INIT });
+  api.auth
+    .logout()
+    .then(() => {
+      logout();
+      history.push("/");
+    })
+    .catch((err) => {});
+};
 
 export const signupInit = (
   payload,
@@ -111,6 +118,7 @@ export const verificationInit = (
     .then(() => {
       dispatch(verificationSuccess());
       onVerificationSuccess();
+      alert("Your account is verified please login.");
       history.push("/login");
     })
     .catch((err) => {
@@ -127,3 +135,86 @@ export const verificationFailure = (error) => ({
   type: types.VERIFICATION_FAILURE,
   error,
 });
+
+export const resendVerificationInit = (
+  payload,
+  onResendVerificationFail,
+  onResendVerificationSuccess
+) => async (dispatch) => {
+  dispatch({ type: types.RESEND_VERIFICATION_INIT });
+  api.auth
+    .resendVerifyCode(payload)
+    .then((res) => {
+      dispatch(verificationSuccess());
+      onResendVerificationSuccess(res);
+    })
+    .catch((err) => {
+      dispatch(verificationFailure());
+      onResendVerificationFail(err.response.data);
+    });
+};
+
+export const forgetPasswordSendCodeInit = (payload, history) => async (
+  dispatch
+) => {
+  dispatch({ type: types.FORGET_PASSWORD_SEND_CODE_INIT });
+  api.auth
+    .forgetPasswordSendCode(payload)
+    .then(() => {
+      dispatch(forgetPasswordSendCodeSuccess(payload.username));
+      history.push("/resetpassword");
+    })
+    .catch((err) => {});
+};
+
+export const forgetPasswordSendCodeSuccess = (username) => ({
+  type: types.FORGET_PASSWORD_SEND_CODE_SUCCESS,
+  username,
+});
+
+export const forgetPasswordVerifyCode = (
+  payload,
+  onForgetPasswordVerifyCodeFail,
+  onForgetPasswordVerifyCodeSuccess
+) => async (dispatch) => {
+  dispatch({ type: types.FORGET_PASSWORD_SEND_CODE_INIT });
+  api.auth
+    .forgetPasswordVerifyCode(payload)
+    .then(() => {
+      onForgetPasswordVerifyCodeSuccess();
+      // dispatch(forgetPasswordSendCodeSuccess(payload.username));
+    })
+    .catch((err) => {
+      onForgetPasswordVerifyCodeFail(err.response.data);
+    });
+};
+export const resetPassword = (payload, history) => async (dispatch) => {
+  dispatch({ type: types.FORGET_PASSWORD_SEND_CODE_INIT });
+  api.auth
+    .resetPassword(payload)
+    .then(() => {
+      // dispatch(forgetPasswordSendCodeSuccess(payload.username));
+      alert(
+        "Password reset Successfully, You can login with your new password now."
+      );
+      history.push("/login");
+    })
+    .catch((err) => {});
+};
+
+export const socialLoginFaceBookInit = (
+  payload,
+  history
+) => async (dispatch) => {
+  dispatch({ type: types.SOCIAL_LOGIN_FACEBOOK_INIT });
+  api.auth
+    .socialFaceBookLogin(payload)
+    .then((value) => {
+      dispatch(loginSuccess());
+      localStorage.setItem("auth-token", "Token " + value.token);
+      history.push("/");
+    })
+    .catch((err) => {
+      dispatch(loginFailure(err.response.data));
+    });
+};

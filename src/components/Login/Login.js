@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./login.css";
+import { Link } from "react-router-dom";
+import MyFaceBookLogin from "../MyFaceBookLogin";
 
 class Login extends Component {
   constructor(props) {
@@ -55,7 +57,7 @@ class Login extends Component {
             />
           </div>
           <div className="form-group">
-            <label for="exampleInputPassword1">Password</label>
+            <label htmlFor="exampleInputPassword1">Password</label>
             <input
               name="password"
               type="password"
@@ -67,30 +69,29 @@ class Login extends Component {
               required
             />
           </div>
-          <div class="error text-danger my-1">{this.state.errors}</div>
+          <div className="error text-danger my-1">{this.state.errors}</div>
           {this.state.isLoading ? (
-            <button class="btn btn-primary" type="button" disabled>
+            <button className="btn btn-warning" type="button" disabled>
               <span
-                class="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm"
                 role="status"
                 aria-hidden="true"
               ></span>
               Loading...
             </button>
           ) : (
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-warning">
               Submit
             </button>
           )}
-          <div class="login_message row d-flex justify-content-between align-items-center">
+          <div className="login_message row d-flex justify-content-between align-items-center">
             <div>
-              Don’t have an account ? <a href="/signup"> Sign up </a>
+              Don’t have an account ? <Link to="/signup">Sign up</Link>
             </div>
-            <div class="">
-              <a href="#" class="btn btn-primary facebook">
-                <span>Login with Facebook</span> <i class="fa fa-facebook"></i>
-              </a>
+            <div>
+              Can't Login? <Link to="/forgetpassword">Forget Password</Link>
             </div>
+            <MyFaceBookLogin />
           </div>
         </form>
       </div>
