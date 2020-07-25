@@ -19,7 +19,7 @@ class MyFaceBookLogin extends Component {
     return (
       <FacebookLogin
         appId="2574533656097865"
-        autoLoad={true}
+        autoLoad={false}
         callback={this.responseFacebook}
       />
     );
