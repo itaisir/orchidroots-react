@@ -65,7 +65,9 @@ class Verification extends Component {
           </div>
           <div>
             Didn't recive the code{" "}
-            <Link onClick={this.onClickResendCode}>resend</Link>
+            <Link to={this.props.myroute} onClick={this.onClickResendCode}>
+              resend
+            </Link>
           </div>
           <div className="error text-danger my-1">{this.state.errors}</div>
         </form>
