@@ -3,6 +3,7 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
 export const LOGOUT_INIT = "LOGOUT_INIT";
+export const LOGOUT_DONE = "LOGOUT_DONE";
 
 export const SIGNUP_INIT = "SIGNUP_INIT";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";

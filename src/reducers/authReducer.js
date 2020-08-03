@@ -26,6 +26,9 @@ const authReducer = (state = initialState, action) =>
       case types.LOGOUT_INIT:
         draft.isLoggedIn = false;
         return;
+      case types.LOGOUT_DONE:
+        draft.isLoggedIn = false;
+        return;
 
       case types.GET_COUNTRIES_SUCCESS:
         draft.countries = action.countries;

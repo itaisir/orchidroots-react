@@ -2,6 +2,7 @@ import React from "react";
 import "./Header.css";
 import { connect } from "react-redux";
 import { logoutInit } from "../../Actions/authActions";
+import { Link } from "react-router-dom";
 
 function UserGreeting(props) {
   return (
@@ -42,9 +43,13 @@ function UserGreeting(props) {
               </a>
             </li>
             <li>
-              <a className="dropdown-item" href="/" onClick={props.logout}>
+              <Link
+                className="dropdown-item"
+                to={props.myroute}
+                onClick={props.logout}
+              >
                 Logout
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -105,7 +110,7 @@ function Header(props) {
 
         <div className="collapse navbar-collapse" id="nav-content">
           <ul className="navbar-nav">
-            {props.isLoggedIn?<UserGreeting {...props} />:<GuestGreeting />}
+            {props.isLoggedIn ? <UserGreeting {...props} /> : <GuestGreeting />}
           </ul>
         </div>
       </div>
@@ -116,6 +121,6 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.authReducer.isLoggedIn,
 });
 const mapDispatchToProps = {
-  logout:logoutInit,
+  logout: logoutInit,
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

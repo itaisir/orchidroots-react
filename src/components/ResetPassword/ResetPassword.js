@@ -29,7 +29,6 @@ class ResetPassword extends Component {
     this.setState({ show_new_password: true, isLoading: false });
   };
   onClickResendCode = () => {
-    debugger
     this.props.forgetPasswordSendCodeInit(
       { username: this.props.username },
       this.onResendResetPasswordFail,
@@ -112,7 +111,9 @@ class ResetPassword extends Component {
             <div className="forgetpassword_message row d-flex justify-content-between align-items-center">
               <div>
                 Didn't recive the code{" "}
-                <Link to={this.props.myroute} onClick={this.onClickResendCode}>resend</Link>
+                <Link to={this.props.myroute} onClick={this.onClickResendCode}>
+                  resend
+                </Link>
               </div>
               <div>
                 Try another username or email ?{" "}

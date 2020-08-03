@@ -20,6 +20,9 @@ export const loginInit = (
     .catch((err) => {
       dispatch(loginFailure(err.response.data));
       onLoginFail(err.response.data.error);
+      if (err.response.data.error === "Please verify your email.") {
+        history.push("/verification");
+      }
     });
 };
 
@@ -72,11 +75,18 @@ export const logoutInit = (history) => async (dispatch) => {
     .logout()
     .then(() => {
       logout();
+      dispatch(logoutDone());
       history.push("/");
     })
-    .catch((err) => {});
+    .catch((err) => {
+      dispatch(logoutDone());
+    });
 };
 
+export const logoutDone = (error) => ({
+  type: types.LOGOUT_DONE,
+  error,
+});
 export const signupInit = (
   payload,
   history,
@@ -202,10 +212,9 @@ export const resetPassword = (payload, history) => async (dispatch) => {
     .catch((err) => {});
 };
 
-export const socialLoginFaceBookInit = (
-  payload,
-  history
-) => async (dispatch) => {
+export const socialLoginFaceBookInit = (payload, history) => async (
+  dispatch
+) => {
   dispatch({ type: types.SOCIAL_LOGIN_FACEBOOK_INIT });
   api.auth
     .socialFaceBookLogin(payload)

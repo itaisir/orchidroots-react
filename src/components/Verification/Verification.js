@@ -47,11 +47,8 @@ class Verification extends Component {
   render() {
     return (
       <div className="loginform col-md-6">
-        <h3>Sign up Successfully!</h3>
-        <h5>
-          Please check your email '{this.props.email}' and enter your
-          verification code
-        </h5>
+        <h3>Email Verification</h3>
+        <h5>Please check your email and enter your verification code.</h5>
 
         <form onSubmit={this.submit}>
           <label htmlFor="exampleInputPassword1">Verification Code</label>
